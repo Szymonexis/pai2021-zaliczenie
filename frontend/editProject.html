@@ -8,27 +8,25 @@
 	</div>
 	<div class="modal-body" id="modal-body">
 		<form class="form">
-			<label for="firstName">Imię</label>
+			<label for="name">Nazwa</label>
 			<input
-				id="firstName"
+				id="name"
 				type="text"
 				class="form-control"
-				ng-model="ctrl.options.data.firstName"
+				ng-model="ctrl.options.data.name"
 			/>
-			<label for="lastName">Nazwisko</label>
-			<input
-				id="lastName"
-				type="text"
+			<label for="ownerName">Kierownik</label>
+			<select
+				id="owner"
 				class="form-control"
-				ng-model="ctrl.options.data.lastName"
-			/>
-			<label for="year">Rok urodzenia</label>
-			<input
-				id="year"
-				type="number"
-				class="form-control"
-				ng-model="ctrl.options.data.year"
-			/>
+				ng-model="ctrl.options.data.owner"
+			>
+				<option
+					ng-repeat="person in ctrl.persons"
+					value="{{person._id}}"
+					ng-bind="person.firstName+' '+person.lastName"
+				></option>
+			</select>
 		</form>
 	</div>
 	<div class="modal-footer">
@@ -37,7 +35,7 @@
 			type="button"
 			ng-click="ctrl.submit('ok')"
 			ng-if="ctrl.options.ok"
-			ng-disabled="!ctrl.options.data.firstName || !ctrl.options.data.lastName"
+			ng-disabled="!ctrl.options.data.name || !ctrl.options.data.owner"
 		></button>
 		<button
 			class="btn btn-danger fa fa-trash"

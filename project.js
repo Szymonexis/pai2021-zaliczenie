@@ -1,12 +1,17 @@
+const { projects } = require("./db");
 const db = require("./db");
 const lib = require("./lib");
 
 const project = (module.exports = {
 	handle: function (env) {
-		const validate = function (project, persons) {
+		const validate = function (project) {
 			let result = {
 				name: project.name,
-				owner: project.owner,
+				owner:
+					typeof project.owner === "string"
+						? db.ObjectId(project.owner)
+						: project.owner,
+				ownerName: project.ownerName,
 			};
 			return result.name && result.owner ? result : null;
 		};
@@ -19,15 +24,26 @@ const project = (module.exports = {
 				.aggregate([
 					{
 						$match: {
-							$or: [
-								{ name: { $regex: RegExp(q, "i") } },
-							],
+							$or: [{ name: { $regex: RegExp(q, "i") } }],
+						},
+					},
+					{
+						$lookup: {
+							from: "persons",
+							localField: "owner",
+							foreignField: "_id",
+							as: "ownerName",
 						},
 					},
 				])
 				.toArray(function (err, projects) {
 					if (!err) {
-                        console.log("\n\nTUTAJ\n\n", projects)
+						projects.forEach((project) => {
+							project.ownerName =
+								project.ownerName[0].firstName +
+								" " +
+								project.ownerName[0].lastName;
+						});
 						lib.sendJson(env.res, projects);
 					} else {
 						lib.sendError(
@@ -51,6 +67,7 @@ const project = (module.exports = {
 			case "GET":
 				_id = db.ObjectId(env.urlParsed.query._id);
 				if (_id) {
+					let project;
 					db.projects.findOne({ _id }, function (err, result) {
 						lib.sendJson(env.res, result);
 					});
@@ -59,7 +76,7 @@ const project = (module.exports = {
 				}
 				break;
 			case "POST":
-				db.persons.insertOne(project, function (err, result) {
+				db.projects.insertOne(project, function (err, result) {
 					if (!err) {
 						sendAllProjects(q);
 					} else {

@@ -104,7 +104,9 @@ app.controller("PersonsCtrl", [
 					function (res) {
 						ctrl.persons = res.data;
 					},
-					function (err) {}
+					function (err) {
+						console.log(err)
+					}
 				);
 		};
 

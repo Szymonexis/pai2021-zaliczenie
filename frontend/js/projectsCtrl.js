@@ -19,8 +19,6 @@ app.controller("ProjectsCtrl", [
 				ctrl.project,
 				index >= 0 ? ctrl.project[index] : projectDefaults
 			);
-			// delete ctrl.person.balance;
-			// delete ctrl.person.transactions;
 			let options = {
 				title: index >= 0 ? "Edytuj dane" : "Nowe dane ",
 				ok: true,
@@ -57,7 +55,7 @@ app.controller("ProjectsCtrl", [
 						case "delete":
 							let options = {
 								title: "Usunąć obiekt?",
-								body: ctrl.projectc[index].name,
+								body: ctrl.projects[index].name,
 								ok: true,
 								cancel: true,
 							};
@@ -65,7 +63,7 @@ app.controller("ProjectsCtrl", [
 								if (answer == "ok") {
 									$http
 										.delete(
-											"/person?_id=" +
+											"/project?_id=" +
 												ctrl.projects[index]._id
 										)
 										.then(
@@ -90,7 +88,9 @@ app.controller("ProjectsCtrl", [
 				function (res) {
 					ctrl.projects = res.data;
 				},
-				function (err) {}
+				function (err) {
+					console.log(err)
+				}
 			);
 		};
 

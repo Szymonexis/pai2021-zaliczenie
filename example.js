@@ -47,20 +47,20 @@ const example = (module.exports = {
 		{
 			_id: db.ObjectId("61af9890aaacf8eda5af491f"),
 			name: "Project 1",
-			owner: "618bed4bdad4eb43c178c7b4",
+			owner: db.ObjectId("618bed4bdad4eb43c178c7b4"),
 		},
 		{
 			_id: db.ObjectId("61af9890aabcf8eda5af491e"),
 			name: "Project 2",
-			owner: "618beab56b0df02e94319c18",
+			owner: db.ObjectId("618beab56b0df02e94319c18"),
 		},
 	],
 
 	contracts: [
 		{
 			_id: db.ObjectId("61ec0f6d052a352aec9bacba"),
-			executor_id: "618be4ba6b0df02e94319c15",
-			project_id: "61af9890aaacf8eda5af491f",
+			executor_id: db.ObjectId("618be4ba6b0df02e94319c15"),
+			project_id: db.ObjectId("61af9890aaacf8eda5af491f"),
 			name: "Contract 1.1",
 			start_date: new Date("<2022-01-05>"),
 			finnish_date: new Date("<2022-01-10>"),
@@ -68,8 +68,8 @@ const example = (module.exports = {
 		},
 		{
 			_id: db.ObjectId("61ec0f787ce49a0dc5352454"),
-			executor_id: "618beab56b0df02e94319c18",
-			project_id: "61af9890aaacf8eda5af491f",
+			executor_id: db.ObjectId("618beab56b0df02e94319c18"),
+			project_id: db.ObjectId("61af9890aaacf8eda5af491f"),
 			name: "Contract 1.2",
 			start_date: new Date("<2022-01-30>"),
 			finnish_date: new Date("<2022-02-05>"),
@@ -77,8 +77,8 @@ const example = (module.exports = {
 		},
 		{
 			_id: db.ObjectId("61ec0f80241a7130ebf4d8c0"),
-			executor_id: "618be4ba6b0df02e94319c15",
-			project_id: "61af9890aabcf8eda5af491e",
+			executor_id: db.ObjectId("618be4ba6b0df02e94319c15"),
+			project_id: db.ObjectId("61af9890aabcf8eda5af491e"),
 			name: "Contract 2.1",
 			start_date: new Date("<2021-06-05>"),
 			finnish_date: new Date("<2021-07-05>"),

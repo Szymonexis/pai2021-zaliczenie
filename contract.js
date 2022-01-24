@@ -30,6 +30,10 @@ const contract = (module.exports = {
 					typeof contract.cost === "number"
 						? contract.cost
 						: Number(contract.cost),
+				commited:
+					typeof contract.commited === "boolean"
+						? contract.commited
+						: Boolean(contract.commited),
 			};
 			return result.name &&
 				result.executor_id &&
@@ -44,7 +48,7 @@ const contract = (module.exports = {
 		let _id, contract;
 		let q = env.urlParsed.query.q ? env.urlParsed.query.q : "";
 
-		const sendAllProjects = function (q = "") {
+		const sendAllContracts = function (q = "") {
 			db.contracts
 				.aggregate([
 					{
@@ -105,13 +109,13 @@ const contract = (module.exports = {
 						lib.sendJson(env.res, result);
 					});
 				} else {
-					sendAllProjects(q);
+					sendAllContracts(q);
 				}
 				break;
 			case "POST":
 				db.contracts.insertOne(contract, function (err, result) {
 					if (!err) {
-						sendAllProjects(q);
+						sendAllContracts(q);
 					} else {
 						lib.sendError(
 							env.res,
@@ -123,13 +127,13 @@ const contract = (module.exports = {
 				break;
 			case "DELETE":
 				_id = db.ObjectId(env.urlParsed.query._id);
-                project_id = db.ObjectId(env.urlParsed.query.project_id);
+				project_id = db.ObjectId(env.urlParsed.query.project_id);
 				if (_id) {
 					db.contracts.findOneAndDelete(
 						{ _id },
 						function (err, result) {
 							if (!err) {
-								sendAllProjects(q);
+								sendAllContracts(q);
 							} else {
 								lib.sendError(
 									env.res,
@@ -139,12 +143,12 @@ const contract = (module.exports = {
 							}
 						}
 					);
-				} if (project_id) {
-                    db.contracts.deleteMany(
+				} else if (project_id) {
+					db.contracts.deleteMany(
 						{ project_id },
 						function (err, result) {
 							if (!err) {
-								sendAllProjects(q);
+								sendAllContracts(q);
 							} else {
 								lib.sendError(
 									env.res,
@@ -154,7 +158,7 @@ const contract = (module.exports = {
 							}
 						}
 					);
-                } else {
+				} else {
 					lib.sendError(
 						env.res,
 						400,
@@ -171,7 +175,7 @@ const contract = (module.exports = {
 						{ returnOriginal: false },
 						function (err, result) {
 							if (!err) {
-								sendAllProjects(q);
+								sendAllContracts(q);
 							} else {
 								lib.sendError(
 									env.res,

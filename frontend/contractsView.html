@@ -26,6 +26,7 @@
         <th>Wynagrodzenie (EUR)</th>
         <th>Data rozpoczęcia</th>
         <th>Data zakończenia</th>
+        <th>Rozliczony</th>
 	</tr>
 	<tr ng-repeat="contract in ctrl.contracts" ng-click="ctrl.edit($index)">
 		<td></td>
@@ -35,5 +36,6 @@
         <td ng-bind="contract.cost"></td>
         <td ng-bind="contract.start_date"></td>
         <td ng-bind="contract.finnish_date"></td>
+        <td ng-bind="contract.commited"></td>
 	</tr>
 </table>

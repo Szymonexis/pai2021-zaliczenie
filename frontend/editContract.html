@@ -45,6 +45,7 @@
 				type="number"
 				class="form-control"
 				value="{{ctrl.options.data.cost}}"
+				ng-model="ctrl.options.data.cost"
 			/>
 			<label for="start_date">Data rozpoczęcia</label>
 			<input
@@ -52,6 +53,7 @@
 				type="date"
 				class="form-control"
 				value="{{ctrl.options.data.start_date}}"
+				ng-model="ctrl.options.data.start_date"
 			/>
 			<label for="finnish_date">Data zakończenia</label>
 			<input
@@ -59,6 +61,15 @@
 				type="date"
 				class="form-control"
 				value="{{ctrl.options.data.finnish_date}}"
+				ng-model="ctrl.options.data.finnish_date"
+			/>
+			<label for="commited">Rozliczony</label>
+			<input
+				id="commited"
+				type="checkbox"
+				class="form-control"
+				checked="{{ctrl.options.data.commited}}"
+				ng-model="ctrl.options.data.commited"
 			/>
 		</form>
 	</div>

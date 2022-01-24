@@ -21,12 +21,12 @@ const lib = module.exports = {
 
     // sprawdzenie uprawnien
     permissions: {
-        '^GET /person$': [ "admin", "user" ],
+        '^GET /person$': [ "admin", "user", "owner" ],
         ' /person$': [ "admin" ],
         ' /persons.*\\.html$': [ "admin" ],
-        '^GET /projcet$': [ "admin" ],
-        ' /projcet$': [ "admin" ],
-        ' /projcet.*\\.html$': [ "admin" ],
+        '^GET /project$': [ "admin", "owner" ],
+        ' /project$': [ "admin" ],
+        ' /projects.*\\.html$': [ "admin" ],
 
 /*
     // Bogatsza wersja:

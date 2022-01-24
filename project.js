@@ -1,4 +1,3 @@
-const { projects } = require("./db");
 const db = require("./db");
 const lib = require("./lib");
 
@@ -67,7 +66,6 @@ const project = (module.exports = {
 			case "GET":
 				_id = db.ObjectId(env.urlParsed.query._id);
 				if (_id) {
-					let project;
 					db.projects.findOne({ _id }, function (err, result) {
 						lib.sendJson(env.res, result);
 					});

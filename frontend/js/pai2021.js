@@ -48,6 +48,14 @@ app.constant("routes", [
 		menu: "Projekty",
 		roles: ["admin"],
 	},
+	{
+		route: "/contracts",
+		templateUrl: "contractsView.html",
+		controller: "ContractsCtrl",
+		controllerAs: "ctrl",
+		menu: "Kontrakty",
+		roles: ["admin", "owner"],
+	},
 ]);
 
 // instalacja routera

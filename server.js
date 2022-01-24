@@ -8,6 +8,7 @@ const ws = require("ws");
 const lib = require("./lib");
 const person = require("./person");
 const project = require("./project");
+const contract = require("./contract");
 const db = require("./db");
 const auth = require("./auth");
 const example = require("./example");
@@ -82,6 +83,9 @@ server.on("request", function (req, res) {
 				break;
             case "/project":
                 project.handle(env);
+                break;
+			case "/contract":
+                contract.handle(env);
                 break;
 			case "/deposit":
 				deposit.handle(env);

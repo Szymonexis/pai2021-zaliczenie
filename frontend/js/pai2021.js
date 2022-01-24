@@ -38,7 +38,7 @@ app.constant("routes", [
 		controller: "TransfersCtrl",
 		controllerAs: "ctrl",
 		menu: "Transfery",
-		roles: ["admin", "user"],
+		roles: ["admin", "user", "owner"],
 	},
 	{
 		route: "/projects",
@@ -139,7 +139,7 @@ app.service("common", [
 
 		// sprawdzenie uprawnien
 		let permissions = {
-			deposit: ["admin"],
+			deposit: ["admin", "owner", "user"],
 		};
 
 		common.checkPermissions = function (activity) {

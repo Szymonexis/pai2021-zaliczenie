@@ -65,7 +65,7 @@ const example = (module.exports = {
 			start_date: new Date("<2022-01-05>").toISOString().split("T")[0],
 			finnish_date: new Date("<2022-01-10>").toISOString().split("T")[0],
 			cost: 199.99,
-			commited: false,
+			commited: true,
 		},
 		{
 			_id: db.ObjectId("61ec0f787ce49a0dc5352454"),

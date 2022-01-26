@@ -76,11 +76,11 @@ const contract = (module.exports = {
 				.toArray(function (err, contracts) {
 					if (!err) {
 						contracts.forEach((contract) => {
-							contract.projectName = contract.projectName[0].name;
-							contract.executorName =
+							contract.projectName = contract.projectName ? contract.projectName.name : undefined;
+							contract.executorName = contract.executorName ?
 								contract.executorName[0].firstName +
 								" " +
-								contract.executorName[0].lastName;
+								contract.executorName[0].lastName : undefined;
 						});
 						lib.sendJson(env.res, contracts);
 					} else {

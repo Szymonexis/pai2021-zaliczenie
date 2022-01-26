@@ -38,10 +38,10 @@ const project = (module.exports = {
 				.toArray(function (err, projects) {
 					if (!err) {
 						projects.forEach((project) => {
-							project.ownerName =
+							project.ownerName = project.ownerName ?
 								project.ownerName[0].firstName +
 								" " +
-								project.ownerName[0].lastName;
+								project.ownerName[0].lastName : undefined;
 						});
 						lib.sendJson(env.res, projects);
 					} else {

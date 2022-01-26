@@ -304,7 +304,24 @@ app.controller("ContainerCtrl", [
 				let message = JSON.parse(messageEvent.data);
 				switch (message.operation) {
 					case "deposit":
-						$scope.$broadcast("refresh", { collection: "persons" });
+						$scope.$broadcast("refresh", {
+							collection: "persons",
+						});
+						break;
+					case "person":
+						$scope.$broadcast("refresh", {
+							collection: "persons",
+						});
+						break;
+					case "project":
+						$scope.$broadcast("refresh", {
+							collection: "projects",
+						});
+						break;
+					case "contract":
+						$scope.$broadcast("refresh", {
+							collection: "contracts",
+						});
 						break;
 				}
 			} catch (ex) {

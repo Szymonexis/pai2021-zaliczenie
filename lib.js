@@ -1,34 +1,36 @@
-const ws = require('ws')
+const ws = require("ws");
 
-const lib = module.exports = {
+const lib = (module.exports = {
+	sessions: {}, // { uuid: { }, ... }
 
-    sessions: {}, // { uuid: { }, ... }
+	wsServer: null,
 
-    wsServer: null,
+	sendJson: function (res, obj = null) {
+		res.writeHead(200, { "Content-type": "application/json" });
+		if (obj != null) res.write(JSON.stringify(obj));
+		res.end();
+	},
 
-    sendJson: function(res, obj = null) {
-        res.writeHead(200, { 'Content-type': 'application/json' })
-        if(obj != null) res.write(JSON.stringify(obj))
-        res.end()    
-    },
+	sendError: function (res, code, cause = "") {
+		console.error(code, cause);
+		res.writeHead(code, { "Content-type": "application/json" });
+		res.write(JSON.stringify({ cause }));
+		res.end();
+	},
 
-    sendError: function(res, code, cause = '') {
-        console.error(code, cause)
-        res.writeHead(code, { 'Content-type': 'application/json' })
-        res.write(JSON.stringify({ cause }))
-        res.end()    
-    },
+	// sprawdzenie uprawnien
+	permissions: {
+		"^GET /person$": ["admin", "user", "owner"],
+		" /person$": ["admin"],
+		" /persons.*\\.html$": ["admin"],
+		"^GET /contract$": ["admin", "owner"],
+		" /contract$": ["admin", "owner"],
+		" /contracts.*\\.html$": ["admin", "owner"],
+		"^GET /project$": ["admin", "owner"],
+		" /project$": ["admin"],
+		" /projects.*\\.html$": ["admin"],
 
-    // sprawdzenie uprawnien
-    permissions: {
-        '^GET /person$': [ "admin", "user", "owner" ],
-        ' /person$': [ "admin" ],
-        ' /persons.*\\.html$': [ "admin" ],
-        '^GET /project$': [ "admin", "owner" ],
-        ' /project$': [ "admin" ],
-        ' /projects.*\\.html$': [ "admin" ],
-
-/*
+		/*
     // Bogatsza wersja:
     permissions: [
         { req: ' /.*View\.html$', roles: [], error: 'Access denied' },
@@ -38,39 +40,48 @@ const lib = module.exports = {
     ]
 
 */
-    },
+	},
 
-    checkPermissions: function(reqStr, roles) {
+	checkPermissions: function (reqStr, roles) {
+		console.log("'" + reqStr + "'");
 
-        console.log('\'' + reqStr + '\'')
+		let permittedRoles = [];
+		for (let pattern in lib.permissions) {
+			let regexp = new RegExp(pattern);
+			if (regexp.test(reqStr)) {
+				permittedRoles = lib.permissions[pattern];
+				break;
+			}
+		}
 
-        let permittedRoles = []
-        for(let pattern in lib.permissions) {
-            let regexp = new RegExp(pattern)
-            if(regexp.test(reqStr)) {
-                permittedRoles = lib.permissions[pattern]
-                break
-            }
-        }
+		// jeśli url ma pustą tablicę ról, jest niechroniony
+		if (permittedRoles.length < 1) return true;
+		if (!roles || roles.length < 1) return false;
 
-        // jeśli url ma pustą tablicę ról, jest niechroniony
-        if(permittedRoles.length < 1) return true
-        if(!roles || roles.length < 1) return false
+		let intersection = [];
+		roles.forEach(function (role) {
+			if (permittedRoles.includes(role)) intersection.push(role);
+		});
+		return intersection.length > 0;
+	},
 
-        let intersection = []
-        roles.forEach(function(role) { if(permittedRoles.includes(role)) intersection.push(role) })
-        return intersection.length > 0
-    },
-
-    broadcast: function(data, selector = null) {
-        let n = 0
-        lib.wsServer.clients.forEach(function(client) {
-            if(client.readyState == ws.OPEN && (!selector || selector(client))) {
-                client.send(JSON.stringify(data))
-                n++
-            }
-        })
-        console.log('Sending a message', JSON.stringify(data), 'to', n, 'clients')
-    }
-        
-}
+	broadcast: function (data, selector = null) {
+		let n = 0;
+		lib.wsServer.clients.forEach(function (client) {
+			if (
+				client.readyState == ws.OPEN &&
+				(!selector || selector(client))
+			) {
+				client.send(JSON.stringify(data));
+				n++;
+			}
+		});
+		console.log(
+			"Sending a message",
+			JSON.stringify(data),
+			"to",
+			n,
+			"clients"
+		);
+	},
+});

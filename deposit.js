@@ -28,8 +28,9 @@ const deposit = (module.exports = {
 							let session = lib.sessions[client.session];
 							return (
 								session &&
-								sessionArray.isArray(session.roles) &&
-								session.roles.includes(["admin"])
+								session.roles &&
+								Array.isArray(session.roles) &&
+								session.roles.includes("admin")
 							);
 						});
 					} else {

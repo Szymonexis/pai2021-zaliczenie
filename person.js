@@ -89,6 +89,17 @@ const person = (module.exports = {
 				db.persons.insertOne(person, function (err, result) {
 					if (!err) {
 						sendAllPersons(q);
+						person.operation = "person";
+						lib.broadcast(person, function (client) {
+							if (client.session == env.session) return false; // nie wysyłaj wiadomości do sprawcy
+							let session = lib.sessions[client.session];
+							return (
+								session &&
+								session.roles &&
+								Array.isArray(session.roles) &&
+								session.roles.includes("admin")
+							);
+						});
 					} else {
 						lib.sendError(
 							env.res,
@@ -101,18 +112,48 @@ const person = (module.exports = {
 			case "DELETE":
 				_id = db.ObjectId(env.urlParsed.query._id);
 				if (_id) {
-					db.persons.findOneAndDelete(
+					db.persons.findOne(
 						{ _id },
-						function (err, result) {
-							if (!err) {
-								sendAllPersons(q);
-							} else {
-								lib.sendError(
-									env.res,
-									400,
-									"persons.findOneAndDelete() failed"
-								);
-							}
+						function (errorMain, personResult) {
+							db.persons.findOneAndDelete(
+								{ _id },
+								function (err, result) {
+									if (!err) {
+										sendAllPersons(q);
+										personResult.operation = "person";
+										lib.broadcast(
+											personResult,
+											function (client) {
+												if (
+													client.session ==
+													env.session
+												)
+													return false; // nie wysyłaj wiadomości do sprawcy
+												let session =
+													lib.sessions[
+														client.session
+													];
+												return (
+													session &&
+													session.roles &&
+													Array.isArray(
+														session.roles
+													) &&
+													session.roles.includes(
+														"admin"
+													)
+												);
+											}
+										);
+									} else {
+										lib.sendError(
+											env.res,
+											400,
+											"persons.findOneAndDelete() failed"
+										);
+									}
+								}
+							);
 						}
 					);
 				} else {
@@ -133,6 +174,18 @@ const person = (module.exports = {
 						function (err, result) {
 							if (!err) {
 								sendAllPersons(q);
+								result.operation = "person";
+								lib.broadcast(result, function (client) {
+									if (client.session == env.session)
+										return false; // nie wysyłaj wiadomości do sprawcy
+									let session = lib.sessions[client.session];
+									return (
+										session &&
+										session.roles &&
+										Array.isArray(session.roles) &&
+										session.roles.includes("admin")
+									);
+								});
 							} else {
 								lib.sendError(
 									env.res,

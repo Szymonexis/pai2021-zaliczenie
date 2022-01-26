@@ -17,7 +17,8 @@ const db = (module.exports = {
 
 	init: function (nextTick) {
 		mongodb.MongoClient.connect(
-			"mongodb://localhost:27017",
+			// "mongodb://localhost:27017",
+			"mongodb+srv://admin:admin@cluster0.zpudl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
 			{ useUnifiedTopology: true },
 			function (err, connection) {
 				if (err) {

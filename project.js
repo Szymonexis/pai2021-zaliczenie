@@ -1,3 +1,4 @@
+const { projects } = require("./db");
 const db = require("./db");
 const lib = require("./lib");
 
@@ -7,9 +8,7 @@ const project = (module.exports = {
 			let result = {
 				name: project.name,
 				owner:
-					typeof project.owner === "string"
-						? db.ObjectId(project.owner)
-						: project.owner,
+					typeof project.owner === "string" ? db.ObjectId(project.owner) : project.owner,
 				ownerName: project.ownerName,
 			};
 			return result.name && result.owner ? result : null;
@@ -38,18 +37,20 @@ const project = (module.exports = {
 				.toArray(function (err, projects) {
 					if (!err) {
 						projects.forEach((project) => {
-							project.ownerName = project.ownerName ?
-								project.ownerName[0].firstName +
-								" " +
-								project.ownerName[0].lastName : undefined;
+							project.ownerName =
+								project.ownerName &&
+								Array.isArray(project.ownerName) &&
+								project.ownerName[0] &&
+								project.ownerName[0].firstName &&
+								project.ownerName[0].lastName
+									? project.ownerName[0].firstName +
+									  " " +
+									  project.ownerName[0].lastName
+									: undefined;
 						});
 						lib.sendJson(env.res, projects);
 					} else {
-						lib.sendError(
-							env.res,
-							400,
-							"projects.aggregate() failed " + err
-						);
+						lib.sendError(env.res, 400, "projects.aggregate() failed " + err);
 					}
 				});
 		};
@@ -77,38 +78,47 @@ const project = (module.exports = {
 				db.projects.insertOne(project, function (err, result) {
 					if (!err) {
 						sendAllProjects(q);
+						project.operation = "project";
+						lib.broadcast(project, function (client) {
+							if (client.session == env.session) return false; // nie wysyłaj wiadomości do sprawcy
+							let session = lib.sessions[client.session];
+							return (
+								session &&
+								session.roles &&
+								Array.isArray(session.roles) &&
+								session.roles.includes("admin")
+							);
+						});
 					} else {
-						lib.sendError(
-							env.res,
-							400,
-							"projects.insertOne() failed"
-						);
+						lib.sendError(env.res, 400, "projects.insertOne() failed");
 					}
 				});
 				break;
 			case "DELETE":
 				_id = db.ObjectId(env.urlParsed.query._id);
 				if (_id) {
-					db.projects.findOneAndDelete(
-						{ _id },
-						function (err, result) {
+					db.projects.findOne({ _id }, function (mainErr, projectResult) {
+						db.projects.findOneAndDelete({ _id }, function (err, result) {
 							if (!err) {
 								sendAllProjects(q);
+								projectResult.operation = "project";
+								lib.broadcast(projectResult, function (client) {
+									if (client.session == env.session) return false; // nie wysyłaj wiadomości do sprawcy
+									let session = lib.sessions[client.session];
+									return (
+										session &&
+										session.roles &&
+										Array.isArray(session.roles) &&
+										session.roles.includes("admin")
+									);
+								});
 							} else {
-								lib.sendError(
-									env.res,
-									400,
-									"projects.findOneAndDelete() failed"
-								);
+								lib.sendError(env.res, 400, "projects.findOneAndDelete() failed");
 							}
-						}
-					);
+						});
+					});
 				} else {
-					lib.sendError(
-						env.res,
-						400,
-						"broken _id for delete " + env.urlParsed.query._id
-					);
+					lib.sendError(env.res, 400, "broken _id for delete " + env.urlParsed.query._id);
 				}
 				break;
 			case "PUT":
@@ -121,21 +131,24 @@ const project = (module.exports = {
 						function (err, result) {
 							if (!err) {
 								sendAllProjects(q);
+								result.operation = "project";
+								lib.broadcast(result, function (client) {
+									if (client.session == env.session) return false; // nie wysyłaj wiadomości do sprawcy
+									let session = lib.sessions[client.session];
+									return (
+										session &&
+										session.roles &&
+										Array.isArray(session.roles) &&
+										session.roles.includes("admin")
+									);
+								});
 							} else {
-								lib.sendError(
-									env.res,
-									400,
-									"projects.findOneAndUpdate() failed"
-								);
+								lib.sendError(env.res, 400, "projects.findOneAndUpdate() failed");
 							}
 						}
 					);
 				} else {
-					lib.sendError(
-						env.res,
-						400,
-						"broken _id for update " + env.urlParsed.query._id
-					);
+					lib.sendError(env.res, 400, "broken _id for update " + env.urlParsed.query._id);
 				}
 				break;
 			default:

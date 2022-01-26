@@ -16,20 +16,13 @@ const contract = (module.exports = {
 						: contract.project_id,
 				start_date:
 					typeof contract.start_date === "string"
-						? new Date(contract.start_date)
-								.toISOString()
-								.split("T")[0]
+						? new Date(contract.start_date).toISOString().split("T")[0]
 						: contract.start_date,
 				finnish_date:
 					typeof contract.finnish_date === "string"
-						? new Date(contract.finnish_date)
-								.toISOString()
-								.split("T")[0]
+						? new Date(contract.finnish_date).toISOString().split("T")[0]
 						: contract.finnish_date,
-				cost:
-					typeof contract.cost === "number"
-						? contract.cost
-						: Number(contract.cost),
+				cost: typeof contract.cost === "number" ? contract.cost : Number(contract.cost),
 				commited:
 					typeof contract.commited === "boolean"
 						? contract.commited
@@ -76,19 +69,27 @@ const contract = (module.exports = {
 				.toArray(function (err, contracts) {
 					if (!err) {
 						contracts.forEach((contract) => {
-							contract.projectName = contract.projectName ? contract.projectName.name : undefined;
-							contract.executorName = contract.executorName ?
-								contract.executorName[0].firstName +
-								" " +
-								contract.executorName[0].lastName : undefined;
+							contract.projectName =
+								contract.projectName &&
+								Array.isArray(contract.projectName) &&
+								contract.projectName[0] &&
+								contract.projectName[0].name
+									? contract.projectName[0].name
+									: undefined;
+							contract.executorName =
+								contract.executorName &&
+								Array.isArray(contract.executorName) &&
+								contract.executorName[0] &&
+								contract.executorName[0].firstName &&
+								contract.executorName[0].lastName
+									? contract.executorName[0].firstName +
+									  " " +
+									  contract.executorName[0].lastName
+									: undefined;
 						});
 						lib.sendJson(env.res, contracts);
 					} else {
-						lib.sendError(
-							env.res,
-							400,
-							"contracts.aggregate() failed " + err
-						);
+						lib.sendError(env.res, 400, "contracts.aggregate() failed " + err);
 					}
 				});
 		};
@@ -116,12 +117,19 @@ const contract = (module.exports = {
 				db.contracts.insertOne(contract, function (err, result) {
 					if (!err) {
 						sendAllContracts(q);
+						contract.operation = "contract";
+						lib.broadcast(contract, function (client) {
+							if (client.session == env.session) return false; // nie wysyłaj wiadomości do sprawcy
+							let session = lib.sessions[client.session];
+							return (
+								session &&
+								session.roles &&
+								Array.isArray(session.roles) &&
+								session.roles.includes("admin")
+							);
+						});
 					} else {
-						lib.sendError(
-							env.res,
-							400,
-							"contracts.insertOne() failed"
-						);
+						lib.sendError(env.res, 400, "contracts.insertOne() failed");
 					}
 				});
 				break;
@@ -129,41 +137,36 @@ const contract = (module.exports = {
 				_id = db.ObjectId(env.urlParsed.query._id);
 				project_id = db.ObjectId(env.urlParsed.query.project_id);
 				if (_id) {
-					db.contracts.findOneAndDelete(
-						{ _id },
-						function (err, result) {
+					db.contracts.findOne({ _id }, function (errorMain, contractResult) {
+						db.contracts.findOneAndDelete({ _id }, function (err, result) {
 							if (!err) {
 								sendAllContracts(q);
+								contractResult.operation = "contract";
+								lib.broadcast(contractResult, function (client) {
+									if (client.session == env.session) return false; // nie wysyłaj wiadomości do sprawcy
+									let session = lib.sessions[client.session];
+									return (
+										session &&
+										session.roles &&
+										Array.isArray(session.roles) &&
+										session.roles.includes("admin")
+									);
+								});
 							} else {
-								lib.sendError(
-									env.res,
-									400,
-									"contracts.findOneAndDelete() failed"
-								);
+								lib.sendError(env.res, 400, "contracts.findOneAndDelete() failed");
 							}
-						}
-					);
+						});
+					});
 				} else if (project_id) {
-					db.contracts.deleteMany(
-						{ project_id },
-						function (err, result) {
-							if (!err) {
-								sendAllContracts(q);
-							} else {
-								lib.sendError(
-									env.res,
-									400,
-									"contracts.deleteMany() failed"
-								);
-							}
+					db.contracts.deleteMany({ project_id }, function (err, result) {
+						if (!err) {
+							sendAllContracts(q);
+						} else {
+							lib.sendError(env.res, 400, "contracts.deleteMany() failed");
 						}
-					);
+					});
 				} else {
-					lib.sendError(
-						env.res,
-						400,
-						"broken _id for delete " + env.urlParsed.query._id
-					);
+					lib.sendError(env.res, 400, "broken _id for delete " + env.urlParsed.query._id);
 				}
 				break;
 			case "PUT":
@@ -176,21 +179,24 @@ const contract = (module.exports = {
 						function (err, result) {
 							if (!err) {
 								sendAllContracts(q);
+								result.operation = "contract";
+								lib.broadcast(result, function (client) {
+									if (client.session == env.session) return false; // nie wysyłaj wiadomości do sprawcy
+									let session = lib.sessions[client.session];
+									return (
+										session &&
+										session.roles &&
+										Array.isArray(session.roles) &&
+										session.roles.includes("admin")
+									);
+								});
 							} else {
-								lib.sendError(
-									env.res,
-									400,
-									"contracts.findOneAndUpdate() failed"
-								);
+								lib.sendError(env.res, 400, "contracts.findOneAndUpdate() failed");
 							}
 						}
 					);
 				} else {
-					lib.sendError(
-						env.res,
-						400,
-						"broken _id for update " + env.urlParsed.query._id
-					);
+					lib.sendError(env.res, 400, "broken _id for update " + env.urlParsed.query._id);
 				}
 				break;
 			default:

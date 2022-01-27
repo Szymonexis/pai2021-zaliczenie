@@ -97,12 +97,7 @@ app.service("common", [
 		};
 
 		// general modal dialog
-		common.dialog = function (
-			templateUrl,
-			controllerName,
-			options,
-			nextTick
-		) {
+		common.dialog = function (templateUrl, controllerName, options, nextTick) {
 			let modalInstance = $uibModal.open({
 				animation: true,
 				ariaLabelledBy: "modal-title-top",
@@ -129,12 +124,7 @@ app.service("common", [
 
 		// confirmation dialog function
 		common.confirm = function (options, nextTick) {
-			common.dialog(
-				"confirmDialog.html",
-				"ConfirmDialog",
-				options,
-				nextTick
-			);
+			common.dialog("confirmDialog.html", "ConfirmDialog", options, nextTick);
 		};
 
 		// sprawdzenie uprawnien
@@ -146,8 +136,7 @@ app.service("common", [
 			// jeśli ktoś nie pełni żadnej roli, zabroń
 			if (!common.roles || common.roles.length < 1) return false;
 			// jeśli aktywność nie ma swoich ról dostępu, zezwól
-			if (!permissions[activity] || permissions[activity].length < 1)
-				return true;
+			if (!permissions[activity] || permissions[activity].length < 1) return true;
 
 			let intersection = [];
 			permissions[activity].forEach(function (role) {
@@ -201,8 +190,7 @@ app.controller("ContainerCtrl", [
 						let intersection = [];
 						if (routes[i].roles && common.roles) {
 							routes[i].roles.forEach(function (role) {
-								if (common.roles.includes(role))
-									intersection.push(role);
+								if (common.roles.includes(role)) intersection.push(role);
 							});
 						}
 						if (!routes[i].roles || intersection.length > 0) {
@@ -235,8 +223,7 @@ app.controller("ContainerCtrl", [
 		// ikona login/logout
 		ctrl.loginIcon = function () {
 			return common.login
-				? common.login +
-						'&nbsp;<span class="fa fa-lg fa-sign-out"></span>'
+				? common.login + '&nbsp;<span class="fa fa-lg fa-sign-out"></span>'
 				: '<span class="fa fa-lg fa-sign-in"></span>';
 		};
 
@@ -277,15 +264,9 @@ app.controller("ContainerCtrl", [
 					function (ret) {
 						if (ret) {
 							rebuildMenu();
-							common.alert.show(
-								"Witaj na pokładzie, " + ret,
-								"alert-success"
-							);
+							common.alert.show("Witaj na pokładzie, " + ret, "alert-success");
 						} else {
-							common.alert.show(
-								"Logowanie nieudane",
-								"alert-danger"
-							);
+							common.alert.show("Logowanie nieudane", "alert-danger");
 						}
 					},
 					function () {}
@@ -305,22 +286,22 @@ app.controller("ContainerCtrl", [
 				switch (message.operation) {
 					case "deposit":
 						$scope.$broadcast("refresh", {
-							collection: "persons",
+							collection: ["persons"],
 						});
 						break;
 					case "person":
 						$scope.$broadcast("refresh", {
-							collection: "persons",
+							collection: ["persons", "contracts", "projects"],
 						});
 						break;
 					case "project":
 						$scope.$broadcast("refresh", {
-							collection: "projects",
+							collection: ["contracts", "projects"],
 						});
 						break;
 					case "contract":
 						$scope.$broadcast("refresh", {
-							collection: "contracts",
+							collection: ["contracts"],
 						});
 						break;
 				}

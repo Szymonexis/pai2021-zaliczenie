@@ -1,6 +1,34 @@
 const db = require("./db");
 const lib = require("./lib");
 
+function toISOLocal(d) {
+	var z = (n) => ("0" + n).slice(-2);
+	var zz = (n) => ("00" + n).slice(-3);
+	var off = d.getTimezoneOffset();
+	var sign = off > 0 ? "-" : "+";
+	off = Math.abs(off);
+
+	return (
+		d.getFullYear() +
+		"-" +
+		z(d.getMonth() + 1) +
+		"-" +
+		z(d.getDate()) +
+		"T" +
+		z(d.getHours()) +
+		":" +
+		z(d.getMinutes()) +
+		":" +
+		z(d.getSeconds()) +
+		"." +
+		zz(d.getMilliseconds()) +
+		sign +
+		z((off / 60) | 0) +
+		":" +
+		z(off % 60)
+	);
+}
+
 const contract = (module.exports = {
 	handle: function (env) {
 		const validate = function (contract) {
@@ -16,11 +44,11 @@ const contract = (module.exports = {
 						: contract.project_id,
 				start_date:
 					typeof contract.start_date === "string"
-						? new Date(contract.start_date).toISOString().split("T")[0]
+						? toISOLocal(new Date(contract.start_date.toString())).split("T")[0]
 						: contract.start_date,
 				finnish_date:
 					typeof contract.finnish_date === "string"
-						? new Date(contract.finnish_date).toISOString().split("T")[0]
+						? toISOLocal(new Date(contract.finnish_date.toString())).split("T")[0]
 						: contract.finnish_date,
 				cost: typeof contract.cost === "number" ? contract.cost : Number(contract.cost),
 				commited:

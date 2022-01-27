@@ -55,6 +55,7 @@ const contract = (module.exports = {
 					typeof contract.commited === "boolean"
 						? contract.commited
 						: Boolean(contract.commited),
+				location: contract.location ? contract.location : "Brak wybranej lokacji",
 			};
 			return result.name &&
 				result.executor_id &&

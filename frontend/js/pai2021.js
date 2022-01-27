@@ -5,6 +5,7 @@ let app = angular.module("pai2021", [
 	"ui.bootstrap",
 	"ngCookies",
 	"ws",
+	"ngMap",
 ]);
 
 // websocket config

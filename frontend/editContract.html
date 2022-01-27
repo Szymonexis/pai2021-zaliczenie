@@ -1,26 +1,13 @@
 <div>
 	<div class="modal-header">
-		<h3
-			class="modal-title"
-			id="modal-title"
-			ng-bind="ctrl.options.title"
-		></h3>
+		<h3 class="modal-title" id="modal-title" ng-bind="ctrl.options.title"></h3>
 	</div>
 	<div class="modal-body" id="modal-body">
 		<form class="form">
 			<label for="name">Nazwa</label>
-			<input
-				id="name"
-				type="text"
-				class="form-control"
-				ng-model="ctrl.options.data.name"
-			/>
+			<input id="name" type="text" class="form-control" ng-model="ctrl.options.data.name" />
 			<label for="executor_id">Wykonawca</label>
-			<select
-				id="executor_id"
-				class="form-control"
-				ng-model="ctrl.options.data.executor_id"
-			>
+			<select id="executor_id" class="form-control" ng-model="ctrl.options.data.executor_id">
 				<option
 					ng-repeat="person in ctrl.persons"
 					value="{{person._id}}"
@@ -28,11 +15,7 @@
 				></option>
 			</select>
 			<label for="project_id">Projekt</label>
-			<select
-				id="project_id"
-				class="form-control"
-				ng-model="ctrl.options.data.project_id"
-			>
+			<select id="project_id" class="form-control" ng-model="ctrl.options.data.project_id">
 				<option
 					ng-repeat="project in ctrl.projects"
 					value="{{project._id}}"
@@ -71,6 +54,33 @@
 				checked="{{ctrl.options.data.commited}}"
 				ng-model="ctrl.options.data.commited"
 			/>
+			<div>
+				<ng-map center="[51.776765, 19.487026]" zoom="14">
+					<marker
+						position="[51.778645, 19.495462]"
+						title="Dormitories"
+						on-click="ctrl.click()"
+					/>
+					<marker
+						position="[51.772653, 19.474785]"
+						title="Rector's office"
+						on-click="ctrl.click()"
+					/>
+					<marker
+						position="[51.776765, 19.487026]"
+						title="Faculty of Mathematics and Computer Science"
+						on-click="ctrl.click()"
+					/>
+				</ng-map>
+			</div>
+			<label for="markerSelector">Marker:</label>
+			<select
+				id="markerSelector"
+				ng-model="ctrl.selected"
+				ng-options="marker as marker.title for marker in ctrl.map.markers track by marker.id"
+				class="form-control"
+				ng-change="ctrl.select(ctrl.selected.id)"
+			></select>
 		</form>
 	</div>
 	<div class="modal-footer">

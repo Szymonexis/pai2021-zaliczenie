@@ -27,6 +27,7 @@
         <th>Data rozpoczęcia</th>
         <th>Data zakończenia</th>
         <th>Rozliczony</th>
+		<th>Lokalizacja</th>
 	</tr>
 	<tr ng-repeat="contract in ctrl.contracts" ng-click="ctrl.edit($index)">
 		<td></td>
@@ -37,5 +38,6 @@
         <td ng-bind="contract.start_date"></td>
         <td ng-bind="contract.finnish_date"></td>
         <td ng-bind="contract.commited ? 'Tak' : 'Nie'"></td>
+		<td ng-bind="contract.location.title"></td>
 	</tr>
 </table>

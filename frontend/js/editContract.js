@@ -2,11 +2,52 @@ app.controller("EditContractCtrl", [
 	"$http",
 	"$uibModalInstance",
 	"options",
-	function ($http, $uibModalInstance, options) {
+	"NgMap",
+	function ($http, $uibModalInstance, options, NgMap) {
 		let ctrl = this;
 		ctrl.options = options;
 		ctrl.projects = [];
 		ctrl.persons = [];
+		ctrl.map = null;
+		ctrl.selected = null;
+
+		NgMap.getMap().then(function (map) {
+			ctrl.map = map;
+			var n = Object.keys(map.markers).length;
+			console.log("Map has been read with", n, "markers");
+
+			for (var m in ctrl.map.markers) {
+				ctrl.map.markers[m].id = m;
+			}
+
+			if (n > 0) {
+				var n = ctrl.options.data.location.id ? ctrl.options.data.location.id : 0;
+				ctrl.selected = Object.values(ctrl.map.markers)[n];
+				ctrl.select(n);
+			}
+		});
+
+		var previousMarker = null;
+
+		ctrl.click = function () {
+			ctrl.selected = this;
+			ctrl.goTo(this);
+			ctrl.options.data.location = { title: ctrl.selected.title, id: ctrl.selected.id };
+		};
+
+		ctrl.select = function (index) {
+			ctrl.goTo(ctrl.map.markers[index]);
+			ctrl.options.data.location = {
+				title: ctrl.map.markers[index].title,
+				id: ctrl.map.markers[index].id,
+			};
+		};
+
+		ctrl.goTo = function (marker) {
+			if (previousMarker) previousMarker.setAnimation(null);
+			previousMarker = marker;
+			marker.setAnimation(google.maps.Animation.BOUNCE);
+		};
 
 		ctrl.submit = function (answer) {
 			$uibModalInstance.close(answer);

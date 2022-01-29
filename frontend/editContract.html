@@ -35,16 +35,16 @@
 				id="start_date"
 				type="date"
 				class="form-control"
-				value="{{ctrl.options.data.start_date}}"
-				ng-model="ctrl.options.data.start_date"
+				value="{{ctrl.toISOLocal(ctrl.options.data.start_date).split('T')[0]}}"
+				ng-model="Date(ctrl.options.data.start_date)"
 			/>
 			<label for="finnish_date">Data zakończenia</label>
 			<input
 				id="finnish_date"
 				type="date"
 				class="form-control"
-				value="{{ctrl.options.data.finnish_date}}"
-				ng-model="ctrl.options.data.finnish_date"
+				value="{{ctrl.toISOLocal(ctrl.options.data.finnish_date).split('T')[0]}}"
+				ng-model="Date(ctrl.options.data.finnish_date)"
 			/>
 			<label for="commited">Rozliczony</label>
 			<input

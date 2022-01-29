@@ -1,34 +1,6 @@
 const db = require("./db");
 const lib = require("./lib");
 
-function toISOLocal(d) {
-	var z = (n) => ("0" + n).slice(-2);
-	var zz = (n) => ("00" + n).slice(-3);
-	var off = d.getTimezoneOffset();
-	var sign = off > 0 ? "-" : "+";
-	off = Math.abs(off);
-
-	return (
-		d.getFullYear() +
-		"-" +
-		z(d.getMonth() + 1) +
-		"-" +
-		z(d.getDate()) +
-		"T" +
-		z(d.getHours()) +
-		":" +
-		z(d.getMinutes()) +
-		":" +
-		z(d.getSeconds()) +
-		"." +
-		zz(d.getMilliseconds()) +
-		sign +
-		z((off / 60) | 0) +
-		":" +
-		z(off % 60)
-	);
-}
-
 const contract = (module.exports = {
 	handle: function (env) {
 		const validate = function (contract) {
@@ -42,14 +14,9 @@ const contract = (module.exports = {
 					typeof contract.project_id === "string"
 						? db.ObjectId(contract.project_id)
 						: contract.project_id,
-				start_date:
-					typeof contract.start_date === "string"
-						? toISOLocal(new Date(contract.start_date.toString())).split("T")[0]
-						: contract.start_date,
+				start_date: typeof contract.start_date ? new Date(contract.start_date) : undefined,
 				finnish_date:
-					typeof contract.finnish_date === "string"
-						? toISOLocal(new Date(contract.finnish_date.toString())).split("T")[0]
-						: contract.finnish_date,
+					typeof contract.finnish_date ? new Date(contract.finnish_date) : undefined,
 				cost: typeof contract.cost === "number" ? contract.cost : Number(contract.cost),
 				commited:
 					typeof contract.commited === "boolean"

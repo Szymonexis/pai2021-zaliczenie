@@ -9,6 +9,18 @@ app.controller("ContractsCtrl", [
 		ctrl.contract = {};
 		ctrl.q = "";
 
+		ctrl.toISOLocal = function (d) {
+			d = new Date(d);
+			var z = (n) => ("0" + n).slice(-2);
+			var zz = (n) => ("00" + n).slice(-3);
+			var off = d.getTimezoneOffset();
+			off = Math.abs(off);
+
+			return (
+				d.getFullYear() + "-" + z(d.getMonth() + 1) + "-" + z(d.getDate())
+			);
+		};
+
 		const contractDefaults = {
 			name: "",
 			executor_id: "",
@@ -86,7 +98,10 @@ app.controller("ContractsCtrl", [
 		ctrl.refreshData();
 
 		$scope.$on("refresh", function (event, parameters) {
-			if (Array.isArray(parameters.collection) && parameters.collection.includes("contracts")) {
+			if (
+				Array.isArray(parameters.collection) &&
+				parameters.collection.includes("contracts")
+			) {
 				ctrl.refreshData();
 			}
 		});

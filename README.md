@@ -1,5 +1,13 @@
 # pai2021
 
+## Poprawki
+
+* daty jako epoch a nie string
+
+* edytowalne lokalizacje wewnatrz aplikacji, nowy tab "Lokalizacje", dodawanie lokalizacji, przechowywanie lokalizacji weanetrz bazy danych w nowej kolekcji "locations"
+
+* cookie "session" w Firefox - analiza dlaczego nie dziala
+
 ## Zadanie na podstawowy poziom zaliczenia
 
 * dodatkowi aktorzy: projekty oraz umowy; GUI dla administratora (tworzenie i edycja projektów) oraz dla kierowników projektów (tworzenie związanych z projektem umów)

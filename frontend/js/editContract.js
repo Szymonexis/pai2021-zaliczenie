@@ -11,6 +11,16 @@ app.controller("EditContractCtrl", [
 		ctrl.map = null;
 		ctrl.selected = null;
 
+		ctrl.toISOLocal = function (d) {
+			d = new Date(d);
+			var z = (n) => ("0" + n).slice(-2);
+			var zz = (n) => ("00" + n).slice(-3);
+			var off = d.getTimezoneOffset();
+			off = Math.abs(off);
+
+			return d.getFullYear() + "-" + z(d.getMonth() + 1) + "-" + z(d.getDate());
+		};
+
 		NgMap.getMap().then(function (map) {
 			ctrl.map = map;
 			var n = Object.keys(map.markers).length;
@@ -71,5 +81,7 @@ app.controller("EditContractCtrl", [
 			},
 			function (err) {}
 		);
+
+		console.log(typeof ctrl.options.data.finnish_date);
 	},
 ]);

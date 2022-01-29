@@ -6,6 +6,7 @@ const db = (module.exports = {
 	users: null,
 	projects: null,
 	contracts: null,
+	locations: null,
 
 	ObjectId: function (_idStr) {
 		try {
@@ -31,6 +32,7 @@ const db = (module.exports = {
 				db.users = conn.collection("users");
 				db.projects = conn.collection("projects");
 				db.contracts = conn.collection("contracts");
+				db.locations = conn.collection("locations");
 				nextTick();
 			}
 		);

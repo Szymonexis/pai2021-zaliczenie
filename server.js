@@ -9,6 +9,7 @@ const lib = require("./lib");
 const person = require("./person");
 const project = require("./project");
 const contract = require("./contract");
+const location = require("./location");
 const db = require("./db");
 const auth = require("./auth");
 const example = require("./example");
@@ -81,12 +82,15 @@ server.on("request", function (req, res) {
 			case "/person":
 				person.handle(env);
 				break;
-            case "/project":
-                project.handle(env);
-                break;
+			case "/project":
+				project.handle(env);
+				break;
 			case "/contract":
-                contract.handle(env);
-                break;
+				contract.handle(env);
+				break;
+			case "/location":
+				location.handle(env);
+				break;
 			case "/deposit":
 				deposit.handle(env);
 				break;
@@ -107,10 +111,7 @@ lib.wsServer.on("connection", function (client) {
 					if (lib.sessions[message.session]) {
 						client.session = message.session;
 						lib.sessions[message.session].wsClient = client;
-						console.log(
-							"Websocket connection established for",
-							message.session
-						);
+						console.log("Websocket connection established for", message.session);
 					}
 					break;
 				default:

@@ -89,6 +89,24 @@ const example = (module.exports = {
 		},
 	],
 
+	locations: [
+		{ 
+			_id: db.ObjectId("61ec0f6d052a352ae34bacba"),
+			pos: [51.778645, 19.495462],
+			name: "Dormitories",
+		},
+		{
+			_id: db.ObjectId("61ec034d052a352ae34bacba"),
+			pos: [51.772653, 19.474785],
+			name: "Rector's office",
+		},
+		{
+			_id: db.ObjectId("61ec0f6d052a342ae34bacba"),
+			pos: [51.776765, 19.487026],
+			name: "Faculty of Mathematics and Computer Science",
+		}
+	],
+
 	initialize: function () {
 		db.persons.count(function (err, n) {
 			if (n == 0) {
@@ -122,7 +140,16 @@ const example = (module.exports = {
 				console.log("No contracts, example data will be used");
 				example.contracts.forEach(function (contract) {
 					db.contracts.insertOne(contract, function (err, result) {});
-					console.log("db.projects.insertOne(" + JSON.stringify(contract) + ")");
+					console.log("db.contracts.insertOne(" + JSON.stringify(contract) + ")");
+				});
+			}
+		});
+		db.locations.count(function (err, n) {
+			if (n == 0) {
+				console.log("No locations, example data will be used");
+				example.locations.forEach(function (location) {
+					db.locations.insertOne(location, function (err, result) {});
+					console.log("db.locations.insertOne(" + JSON.stringify(location) + ")");
 				});
 			}
 		});

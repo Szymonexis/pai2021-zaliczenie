@@ -54,26 +54,19 @@
 				checked="{{ctrl.options.data.commited}}"
 				ng-model="ctrl.options.data.commited"
 			/>
+			<label for="map">Lokalizacja</label>
 			<div>
 				<ng-map center="[51.776765, 19.487026]" zoom="14">
 					<marker
-						position="[51.778645, 19.495462]"
-						title="Dormitories"
-						on-click="ctrl.click()"
-					/>
-					<marker
-						position="[51.772653, 19.474785]"
-						title="Rector's office"
-						on-click="ctrl.click()"
-					/>
-					<marker
-						position="[51.776765, 19.487026]"
-						title="Faculty of Mathematics and Computer Science"
-						on-click="ctrl.click()"
-					/>
+						ng-repeat="location in ctrl.locations"
+						position="{{location.pos}}"
+						title="{{location.name}}"
+						id="{{location.id}}"
+					>
+					</marker>
 				</ng-map>
 			</div>
-			<label for="markerSelector">Marker:</label>
+			<label for="markerSelector">Marker</label>
 			<select
 				id="markerSelector"
 				ng-model="ctrl.selected"

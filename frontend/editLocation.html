@@ -1,0 +1,47 @@
+<div>
+	<div class="modal-header">
+		<h3
+			class="modal-title"
+			id="modal-title"
+			ng-bind="ctrl.options.title"
+		></h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+		<form class="form">
+			<label for="name">Nazwa</label>
+			<input
+				id="name"
+				type="text"
+				class="form-control"
+				ng-model="ctrl.options.data.name"
+			/>
+			<label for="pos">Lokalizacja</label>
+			<div>
+				<ng-map center="[51.776765, 19.487026]" zoom="14">
+
+				</ng-map>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button
+			class="btn btn-success fa fa-check"
+			type="button"
+			ng-click="ctrl.submit('ok')"
+			ng-if="ctrl.options.ok"
+			ng-disabled="!ctrl.options.data.name || !ctrl.options.data.pos"
+		></button>
+		<button
+			class="btn btn-danger fa fa-trash"
+			type="button"
+			ng-click="ctrl.submit('delete')"
+			ng-if="ctrl.options.delete"
+		></button>
+		<button
+			class="btn btn-warning fa fa-times"
+			type="button"
+			ng-click="ctrl.cancel()"
+			ng-if="ctrl.options.cancel"
+		></button>
+	</div>
+</div>

@@ -8,6 +8,7 @@ app.controller("EditContractCtrl", [
 		ctrl.options = options;
 		ctrl.projects = [];
 		ctrl.persons = [];
+		ctrl.locations = [];
 		ctrl.map = null;
 		ctrl.selected = null;
 
@@ -65,6 +66,14 @@ app.controller("EditContractCtrl", [
 		ctrl.cancel = function () {
 			$uibModalInstance.dismiss(null);
 		};
+
+		$http.get("/location").then(
+			function (res) {
+				ctrl.locations = res.data;
+				ctrl.options.data.location = ctrl.locations[0]._id;
+			},
+			function (err) {}
+		);
 
 		$http.get("/project").then(
 			function (res) {

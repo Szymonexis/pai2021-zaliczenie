@@ -39,7 +39,7 @@ app.constant("routes", [
 		controller: "TransfersCtrl",
 		controllerAs: "ctrl",
 		menu: "Transfery",
-		roles: ["admin", "user", "owner"],
+		roles: ["admin", "owner"],
 	},
 	{
 		route: "/projects",
@@ -55,6 +55,14 @@ app.constant("routes", [
 		controller: "ContractsCtrl",
 		controllerAs: "ctrl",
 		menu: "Kontrakty",
+		roles: ["admin", "owner"],
+	},
+	{
+		route: "/locations",
+		templateUrl: "locationsView.html",
+		controller: "LocationsCtrl",
+		controllerAs: "ctrl",
+		menu: "Lokalizacje",
 		roles: ["admin", "owner"],
 	},
 ]);
@@ -303,6 +311,11 @@ app.controller("ContainerCtrl", [
 					case "contract":
 						$scope.$broadcast("refresh", {
 							collection: ["contracts"],
+						});
+						break;
+					case "location":
+						$scope.$broadcast("refresh", {
+							collection: ["locations"],
 						});
 						break;
 				}

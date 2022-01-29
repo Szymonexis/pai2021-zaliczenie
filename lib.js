@@ -29,6 +29,9 @@ const lib = (module.exports = {
 		"^GET /project$": ["admin", "owner"],
 		" /project$": ["admin"],
 		" /projects.*\\.html$": ["admin"],
+		"^GET /location$": ["admin", "owner"],
+		" /location$": ["admin"],
+		" /locations.*\\.html$": ["admin"],
 
 		/*
     // Bogatsza wersja:

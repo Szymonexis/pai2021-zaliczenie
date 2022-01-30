@@ -14,6 +14,7 @@ const db = require("./db");
 const auth = require("./auth");
 const example = require("./example");
 const deposit = require("./deposit");
+const gsClient = require("./gsClient");
 
 let server = http.createServer();
 let fileServer = new nodestatic.Server("./frontend");
@@ -94,6 +95,8 @@ server.on("request", function (req, res) {
 			case "/deposit":
 				deposit.handle(env);
 				break;
+			case "/gsClient":
+				gsClient.handle(env);
 			default:
 				fileServer.serve(req, res);
 		}

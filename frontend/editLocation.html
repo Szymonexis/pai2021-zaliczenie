@@ -1,26 +1,23 @@
 <div>
 	<div class="modal-header">
-		<h3
-			class="modal-title"
-			id="modal-title"
-			ng-bind="ctrl.options.title"
-		></h3>
+		<h3 class="modal-title" id="modal-title" ng-bind="ctrl.options.title"></h3>
 	</div>
 	<div class="modal-body" id="modal-body">
 		<form class="form">
 			<label for="name">Nazwa</label>
-			<input
-				id="name"
-				type="text"
-				class="form-control"
-				ng-model="ctrl.options.data.name"
-			/>
+			<input id="name" type="text" class="form-control" ng-model="ctrl.options.data.name" />
 			<label for="pos">Lokalizacja</label>
 			<div>
 				<ng-map center="[51.776765, 19.487026]" zoom="14">
-
+					<marker
+						position="{{ctrl.pos}}"
+						title="{{ctrl.options.data.name}}"
+						id="0"
+					></marker>
 				</ng-map>
 			</div>
+			<label for="geocoding">Adres</label>
+			<input id="geocoding" type="text" class="form-control" ng-model="ctrl.address" />
 		</form>
 	</div>
 	<div class="modal-footer">

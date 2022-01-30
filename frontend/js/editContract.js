@@ -15,7 +15,6 @@ app.controller("EditContractCtrl", [
 		ctrl.toISOLocal = function (d) {
 			d = new Date(d);
 			var z = (n) => ("0" + n).slice(-2);
-			var zz = (n) => ("00" + n).slice(-3);
 			var off = d.getTimezoneOffset();
 			off = Math.abs(off);
 

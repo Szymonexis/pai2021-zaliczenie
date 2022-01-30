@@ -32,6 +32,9 @@ const lib = (module.exports = {
 		"^GET /location$": ["admin", "owner"],
 		" /location$": ["admin"],
 		" /locations.*\\.html$": ["admin"],
+		"^GET /gsClient$": ["admin", "owner"],
+		" /gsClient$": ["admin", "owner"],
+		" /gsClient.*\\.html$": ["admin", "owner"],
 
 		/*
     // Bogatsza wersja:

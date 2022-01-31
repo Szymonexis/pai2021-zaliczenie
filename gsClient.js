@@ -6,8 +6,6 @@ const gsClient = (module.exports = {
 		const client = new Client({});
 		let address = env.urlParsed.query.address ? env.urlParsed.query.address : "";
 
-		console.log(env.res);
-
 		const args = {
 			params: {
 				key: "AIzaSyCb_PSkynAF2SQO_0s_ItRD5Hcn3xNIFrg",

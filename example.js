@@ -94,16 +94,19 @@ const example = (module.exports = {
 			_id: db.ObjectId("61ec0f6d052a352ae34bacba"),
 			pos: [51.778645, 19.495462],
 			name: "Dormitories",
+			address: "Jana Matejki 21/23, 90-231 Łódź",
 		},
 		{
 			_id: db.ObjectId("61ec034d052a352ae34bacba"),
 			pos: [51.772653, 19.474785],
 			name: "Rector's office",
+			address: "ul. Prez. Gabriela Narutowicza 68, 90-136 Łódź",
 		},
 		{
 			_id: db.ObjectId("61ec0f6d052a342ae34bacba"),
 			pos: [51.776765, 19.487026],
 			name: "Faculty of Mathematics and Computer Science",
+			address: "Stefana Banacha 22, 90-238 Łódź",
 		}
 	],
 

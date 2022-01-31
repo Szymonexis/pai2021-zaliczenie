@@ -20,11 +20,13 @@
 		<th>Nazwa</th>
 		<th>Długość geograficzna</th>
 		<th>Szerokość geograficzna</th>
+		<th>Adres</th>
 	</tr>
 	<tr ng-repeat="location in ctrl.locations" ng-click="ctrl.edit($index)">
 		<td></td>
 		<td ng-bind="location.name"></td>
 		<td ng-bind="location.pos[0]"></td>
 		<td ng-bind="location.pos[1]"></td>
+		<td ng-bind="location.address"></td>
 	</tr>
 </table>

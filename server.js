@@ -97,6 +97,7 @@ server.on("request", function (req, res) {
 				break;
 			case "/gsClient":
 				gsClient.handle(env);
+				break;
 			default:
 				fileServer.serve(req, res);
 		}

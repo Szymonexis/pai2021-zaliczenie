@@ -8,16 +8,29 @@
 			<input id="name" type="text" class="form-control" ng-model="ctrl.options.data.name" />
 			<label for="pos">Lokalizacja</label>
 			<div>
-				<ng-map center="[51.776765, 19.487026]" zoom="14">
+				<ng-map center="{{ctrl.options.data.pos || [0, 0]}}" zoom="14">
 					<marker
-						position="{{ctrl.pos}}"
+						position="{{ctrl.options.data.pos}}"
 						title="{{ctrl.options.data.name}}"
 						id="0"
 					></marker>
 				</ng-map>
 			</div>
 			<label for="geocoding">Adres</label>
-			<input id="geocoding" type="text" class="form-control" ng-model="ctrl.address" />
+			<input
+				id="geocoding"
+				type="text"
+				class="form-control"
+				ng-model="ctrl.options.data.address"
+			/>
+			<button
+				class="btn btn-success fa fa-check"
+				type="button"
+				ng-click="ctrl.checkMap()"
+				style="align-items: center"
+			>
+				Pokaz
+			</button>
 		</form>
 	</div>
 	<div class="modal-footer">
@@ -26,7 +39,7 @@
 			type="button"
 			ng-click="ctrl.submit('ok')"
 			ng-if="ctrl.options.ok"
-			ng-disabled="!ctrl.options.data.name || !ctrl.options.data.pos"
+			ng-disabled="!ctrl.options.data.name || !ctrl.options.data.pos || !ctrl.options.data.address"
 		></button>
 		<button
 			class="btn btn-danger fa fa-trash"

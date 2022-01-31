@@ -12,6 +12,7 @@ app.controller("LocationsCtrl", [
 		const locationDefaults = {
 			name: "",
 			pos: "",
+			address: "",
 		};
 
 		ctrl.edit = function (index) {
@@ -73,9 +74,7 @@ app.controller("LocationsCtrl", [
 				function (res) {
 					ctrl.locations = res.data;
 				},
-				function (err) {
-					console.log(err);
-				}
+				function (err) {}
 			);
 		};
 
@@ -84,7 +83,7 @@ app.controller("LocationsCtrl", [
 		$scope.$on("refresh", function (event, parameters) {
 			if (
 				Array.isArray(parameters.collection) &&
-				(parameters.collection.includes("locations"))
+				parameters.collection.includes("locations")
 			) {
 				ctrl.refreshData();
 			}

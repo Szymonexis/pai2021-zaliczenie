@@ -56,7 +56,7 @@
 			/>
 			<label for="map">Lokalizacja</label>
 			<div>
-				<ng-map center="[51.776765, 19.487026]" zoom="14">
+				<ng-map center="{{ctrl.center}}" zoom="14">
 					<marker
 						ng-repeat="location in ctrl.locations"
 						position="{{location.pos}}"

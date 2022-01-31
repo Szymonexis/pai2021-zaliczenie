@@ -7,8 +7,9 @@ const location = (module.exports = {
 			let result = {
 				name: location.name,
 				pos: location.pos,
+				address: location.address,
 			};
-			return result.name && result.pos ? result : null;
+			return result.name && result.pos && result.address ? result : null;
 		};
 
 		let _id, location;

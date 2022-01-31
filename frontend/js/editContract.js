@@ -11,11 +11,11 @@ app.controller("EditContractCtrl", [
 		ctrl.locations = [];
 		ctrl.map = null;
 		ctrl.selected = null;
+		ctrl.center = [];
 
 		ctrl.toISOLocal = function (d) {
 			d = new Date(d);
 			var z = (n) => ("0" + n).slice(-2);
-			var zz = (n) => ("00" + n).slice(-3);
 			var off = d.getTimezoneOffset();
 			off = Math.abs(off);
 
@@ -25,6 +25,7 @@ app.controller("EditContractCtrl", [
 		NgMap.getMap().then(function (map) {
 			ctrl.map = map;
 			var n = Object.keys(map.markers).length;
+			ctrl.center = ctrl.locations[0].pos;
 			console.log("Map has been read with", n, "markers");
 
 			for (var m in ctrl.map.markers) {
@@ -34,20 +35,16 @@ app.controller("EditContractCtrl", [
 			if (n > 0) {
 				var n = ctrl.options.data.location.id ? ctrl.options.data.location.id : 0;
 				ctrl.selected = Object.values(ctrl.map.markers)[n];
+				console.log(ctrl.selected);
 				ctrl.select(n);
 			}
 		});
 
 		var previousMarker = null;
 
-		ctrl.click = function () {
-			ctrl.selected = this;
-			ctrl.goTo(this);
-			ctrl.options.data.location = { title: ctrl.selected.title, id: ctrl.selected.id };
-		};
-
 		ctrl.select = function (index) {
 			ctrl.goTo(ctrl.map.markers[index]);
+			ctrl.center = ctrl.locations[index].pos;
 			ctrl.options.data.location = {
 				title: ctrl.map.markers[index].title,
 				id: ctrl.map.markers[index].id,

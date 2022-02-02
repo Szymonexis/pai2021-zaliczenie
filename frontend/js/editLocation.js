@@ -7,7 +7,7 @@ app.controller("EditLocationCtrl", [
 		ctrl.options = options;
 
 		ctrl.checkMap = function () {
-			$http.get("/gsClient?address=" + ctrl.address.replaceAll(" ", "+")).then(
+			$http.get("/gsClient?address=" + ctrl.options.data.address.replaceAll(" ", "+")).then(
 				function (res) {
 					ctrl.options.data.pos = res.data.pos;
 				},
